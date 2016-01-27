@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$" libraries="{ng-html5dragdrop node_modules}" />
+    <file url="file://$PROJECT_DIR$/tests/app.spec.js" libraries="{PaperJS}" />
+    <file url="PROJECT" libraries="{jasmine-DefinitelyTyped}" />
+    <includedPredefinedLibrary name="Node.js Core" />
+  </component>
+</project>
