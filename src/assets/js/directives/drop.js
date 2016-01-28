@@ -37,43 +37,30 @@
      *         expect to receive the event data and the dragData if available
      *         as parameters.
      */
-    angular.module('htmlDragDrop').directive('htmlDrag', function () {
+    angular.module('htmlDragDrop').directive('htmlDrop', function () {
         return {
             restrict: 'A',
             scope: {
-                onDragStart: '=',
-                onDrag: '=',
-                onDragEnd: '=',
-                dragData: '='
+                onDragEnter: '=',
+                onDragExit: '=',
+                onDragLeave: '=',
+                onDragOver: '=',
+                onDrop: '='
             },
             link: function (scope, element) {
-                element.attr('draggable', true);
+                element.attr('droppable', true);
 
-                if (angular.isObject(scope.dragData)) {
-                    element.data(scope.dragData);
-                } else {
-                    element.data('dragData', scope.dragData);
-                }
-
-                element.on('dragstart', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
-
-                    if (angular.isFunction(scope.onDragStart))
-                        scope.onDragStart(event, element, element.data());
+                element.on('dragover', function (event) {
+                    event.preventDefault();
                 });
 
-                element.on('drag', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
+                element.on('drop', function (event) {
+                    var id = event.dataTransfer.getData('text/plain'),
+                        el = document.getElementById(id),
+                        element = angular.element(el);
 
-                    if (angular.isFunction(scope.onDrag))
-                        scope.onDrag(event, element, element.data());
-                });
-
-                element.on('dragend', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
-
-                    if (angular.isFunction(scope.onDragEnd))
-                        scope.onDragEnd(event, element, element.data());
+                    if (angular.isFunction(scope.onDrop))
+                        scope.onDrop(event, element, element.data());
                 });
             }
         }
