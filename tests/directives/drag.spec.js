@@ -104,7 +104,7 @@
                 expect(event[0]).toEqual(jasmine.any(Function));
             });
 
-            it('should assign the id to event.dataTransfer when the drag event is fired', function () {
+            it('should not error if the callback method is not provided', function () {
                 var element = $compile('<div html5-drag id="test-id"></div>')($scope),
                     event, eventData;
                 $scope.$apply();
@@ -115,7 +115,6 @@
                 };
 
                 event(eventData);
-                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text/plain', 'test-id');
             });
 
             it('should fire a callback method if provided', function () {
@@ -157,7 +156,6 @@
                 };
 
                 event(eventData);
-                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text/plain', 'test-id');
             });
 
             it('should fire a callback method if provided', function () {

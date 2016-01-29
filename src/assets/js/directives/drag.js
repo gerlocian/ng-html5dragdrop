@@ -64,15 +64,11 @@
                 });
 
                 element.on('drag', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
-
                     if (angular.isFunction(onDrag))
                         onDrag(event, element, element.data().dragData);
                 });
 
                 element.on('dragend', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
-
                     if (angular.isFunction(onDragEnd))
                         onDragEnd(event, element, element.data().dragData);
                 });
