@@ -37,45 +37,66 @@
      *         expect to receive the event data and the dragData if available
      *         as parameters.
      */
-    angular.module('htmlDragDrop').directive('htmlDrag', function () {
+    angular.module('html5DragDrop').directive('html5Drag', function () {
         return {
             restrict: 'A',
-            scope: {
-                onDragStart: '=',
-                onDrag: '=',
-                onDragEnd: '=',
-                dragData: '='
-            },
-            link: function (scope, element) {
-                element.attr('draggable', true);
+            link: function (scope, element, attrs) {
+                var dragData = scope.$eval(attrs.dragData),
+                    onDragStart = scope.$eval(attrs.onDragStart),
+                    onDrag = scope.$eval(attrs.onDrag),
+                    onDragEnd = scope.$eval(attrs.onDragEnd);
 
-                if (angular.isObject(scope.dragData)) {
-                    element.data(scope.dragData);
-                } else {
-                    element.data('dragData', scope.dragData);
+                // Assign a unique id to the element if it has no id.
+                if (!element.attr('id')) {
+                    element.attr('id', generateUniqueId());
                 }
 
+                // Add attributes to the element to make it draggable.
+                element.attr('draggable', true);
+                element.data('dragData', dragData);
+
+                // Assign event handlers to dragging events.
                 element.on('dragstart', function (event) {
                     event.dataTransfer.setData('text/plain', element.attr('id'));
 
-                    if (angular.isFunction(scope.onDragStart))
-                        scope.onDragStart(event, element, element.data());
+                    if (angular.isFunction(onDragStart))
+                        onDragStart(event, element, element.data().dragData);
                 });
 
                 element.on('drag', function (event) {
                     event.dataTransfer.setData('text/plain', element.attr('id'));
 
-                    if (angular.isFunction(scope.onDrag))
-                        scope.onDrag(event, element, element.data());
+                    if (angular.isFunction(onDrag))
+                        onDrag(event, element, element.data().dragData);
                 });
 
                 element.on('dragend', function (event) {
                     event.dataTransfer.setData('text/plain', element.attr('id'));
 
-                    if (angular.isFunction(scope.onDragEnd))
-                        scope.onDragEnd(event, element, element.data());
+                    if (angular.isFunction(onDragEnd))
+                        onDragEnd(event, element, element.data().dragData);
                 });
             }
         }
     });
+
+    /**
+     * Generates a unique id for the element in the event that the element does
+     * not have an id. This is needed so that the drag can assign an id to the
+     * dataTransfer so that the end of the drag events can determine which
+     * element was dragged.
+     *
+     * @see http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+     * @return {string} The new unique id for the element.
+     */
+    function generateUniqueId() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    }
 }());

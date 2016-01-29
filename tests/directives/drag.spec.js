@@ -1,124 +1,181 @@
 (function () {
     'use strict';
 
-    var $compile, $scope, element, events = [
-            'drag', 'dragend', 'dragstart'
-        ];
+    var $compile, $scope;
+
+    function getEventHandlersFromElement(element) {
+        return angular.element._data(element[0], 'events');
+    }
+
+    function getEventHandlerForEvent(element, event) {
+        var eventsData = getEventHandlersFromElement(element);
+        return eventsData.events[event];
+    }
 
     describe('Drag directive', function () {
         beforeEach(module('html5DragDrop'));
         beforeEach(inject(function (_$compile_, _$rootScope_) {
             $compile = _$compile_;
             $scope = _$rootScope_.$new();
-
-            element = $compile(
-                '<div id="test-drag-element" html5-drag></div>'
-            )($scope);
-            $scope.$apply();
         }));
 
         afterEach(function () {
             $compile = null;
             $scope = null;
-            element = null;
+        });
+
+        it('should assign an id to the element if it does not have one', function () {
+            var element = $compile('<div html5-drag></div>')($scope);
+            $scope.$apply();
+
+            expect(element.attr('id')).toBeDefined();
+            expect(element.attr('id')).not.toBeNull();
+            expect(element.attr('id').length).toBe(36);
         });
 
         it('should add "draggable" to the element', function () {
+            var element = $compile('<div html5-drag></div>')($scope);
+            $scope.$apply();
+
             expect(element.attr('draggable')).toBeDefined();
             expect(element.attr('draggable')).toBe('true');
         });
 
-        it('should have handlers for the events of the drag', function () {
-            var eventData = angular.element._data(element[0], 'events');
+        it('should assign provided drag data to the element\'s data method', function () {
+            var element;
 
-            events.forEach(function (el) {
-                expect(eventData.events[el]).toBeDefined();
-                expect(eventData.events[el].length).toBeGreaterThan(0);
+            $scope.testDragData = { data: '5bd7fffd-2ec8-12bd-df47-ffa9253d1a23'};
+            element = $compile('<div html5-drag drag-data="testDragData"></div>')($scope);
+            $scope.$apply();
 
-                eventData.events[el].forEach(function (event) {
-                    expect(event).toEqual(jasmine.any(Function));
-                    event();
-                });
+            expect(element.data()).toEqual(jasmine.any(Object));
+            expect(element.data().dragData).toEqual(jasmine.any(Object));
+            expect(element.data().dragData).toBe($scope.testDragData);
+        });
+
+        describe('onDragStart', function () {
+            it('should be assigned a handler', function () {
+                var element = $compile('<div html5-drag></div>')($scope), event;
+                $scope.$apply();
+
+                event = getEventHandlerForEvent(element, 'dragstart');
+
+                expect(event[0]).toBeDefined();
+                expect(event[0]).toEqual(jasmine.any(Function));
+            });
+
+            it('should assign the id to event.dataTransfer when the dragstart event is fired', function () {
+                var element = $compile('<div html5-drag id="test-id"></div>')($scope),
+                    event, eventData;
+                $scope.$apply();
+
+                event = getEventHandlerForEvent(element, 'dragstart')[0];
+                eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
+
+                event(eventData);
+                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text/plain', 'test-id');
+            });
+
+            it('should fire a callback method if provided', function () {
+                var element, event, eventData;
+
+                $scope.testOnDragStart = jasmine.createSpy('onDragStart');
+                $scope.testDragData = { data: '5bd7fffd-2ec8-12bd-df47-ffa9253d1a23'};
+                element = $compile(
+                    '<div html5-drag id="test-id" on-drag-start="testOnDragStart" drag-data="testDragData"></div>'
+                )($scope);
+                $scope.$apply();
+                eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
+                event = getEventHandlerForEvent(element, 'dragstart')[0];
+
+                event(eventData);
+                expect($scope.testOnDragStart).toHaveBeenCalledWith(eventData, element, $scope.testDragData);
             });
         });
 
-        it('should allow onDragStart handler', inject(function ($injector) {
-            var callback, compile, elem, scope, eventData, event, data;
+        describe('onDrag', function () {
+            it('should be assigned a handler', function () {
+                var element = $compile('<div html5-drag></div>')($scope), event;
+                $scope.$apply();
 
-            // Create callback spy and inject it into the scope.
-            callback = jasmine.createSpy('callback');
-            scope = $injector.get('$rootScope').$new();
-            scope.dragStartMethod = callback;
-            scope.dragdata = { test: 'Goodbye!' };
+                event = getEventHandlerForEvent(element, 'drag');
 
-            // Create the draggable element and inject the scope into the directive.
-            compile = $injector.get('$compile');
-            elem = compile('<div html5-drag on-drag-start="dragStartMethod" drag-data="dragdata"></div>')(scope);
-            scope.$apply();
+                expect(event[0]).toBeDefined();
+                expect(event[0]).toEqual(jasmine.any(Function));
+            });
 
-            // Dig into the event handlers for the newly created element.
-            eventData = angular.element._data(elem[0], 'events');
+            it('should assign the id to event.dataTransfer when the drag event is fired', function () {
+                var element = $compile('<div html5-drag id="test-id"></div>')($scope),
+                    event, eventData;
+                $scope.$apply();
 
-            // Get the event handler for onDragStart and create a dummy event object.
-            event = eventData.events.dragstart[0];
-            data = {test: 'HelloWorld!'};
+                event = getEventHandlerForEvent(element, 'drag')[0];
+                eventData = {
+                    dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData'])
+                };
 
-            // Run it and insure the callback was actually run.
-            event(data);
-            expect(callback).toHaveBeenCalledWith(data, scope.dragdata);
-        }));
+                event(eventData);
+                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text/plain', 'test-id');
+            });
 
-        it('should allow onDrag handler', inject(function ($injector) {
-            var callback, compile, elem, scope, eventData, event, data;
+            it('should fire a callback method if provided', function () {
+                var element, event, eventData;
 
-            // Create callback spy and inject it into the scope.
-            callback = jasmine.createSpy('callback');
-            scope = $injector.get('$rootScope').$new();
-            scope.dragMethod = callback;
-            scope.dragdata = { test: 'Goodbye!' };
+                $scope.testOnDrag = jasmine.createSpy('onDrag');
+                $scope.testDragData = { data: '5bd7fffd-2ec8-12bd-df47-ffa9253d1a23'};
+                element = $compile(
+                    '<div html5-drag id="test-id" on-drag="testOnDrag" drag-data="testDragData"></div>'
+                )($scope);
+                $scope.$apply();
+                eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
+                event = getEventHandlerForEvent(element, 'drag')[0];
 
-            // Create the draggable element and inject the scope into the directive.
-            compile = $injector.get('$compile');
-            elem = compile('<div html5-drag on-drag="dragMethod" drag-data="dragdata"></div>')(scope);
-            scope.$apply();
+                event(eventData);
+                expect($scope.testOnDrag).toHaveBeenCalledWith(eventData, element, $scope.testDragData);
+            });
+        });
 
-            // Dig into the event handlers for the newly created element.
-            eventData = angular.element._data(elem[0], 'events');
+        describe('onDragEnd', function () {
+            it('should be assigned a handler', function () {
+                var element = $compile('<div html5-drag></div>')($scope), event;
+                $scope.$apply();
 
-            // Get the event handler for onDragStart and create a dummy event object.
-            event = eventData.events.drag[0];
-            data = {test: 'HelloWorld!'};
+                event = getEventHandlerForEvent(element, 'dragend');
 
-            // Run it and insure the callback was actually run.
-            event(data);
-            expect(callback).toHaveBeenCalledWith(data, scope.dragdata);
-        }));
+                expect(event[0]).toBeDefined();
+                expect(event[0]).toEqual(jasmine.any(Function));
+            });
 
-        it('should allow onDragEnd handler', inject(function ($injector) {
-            var callback, compile, elem, scope, eventData, event, data;
+            it('should assign the id to event.dataTransfer when the dragend event is fired', function () {
+                var element = $compile('<div html5-drag id="test-id"></div>')($scope),
+                    event, eventData;
+                $scope.$apply();
 
-            // Create callback spy and inject it into the scope.
-            callback = jasmine.createSpy('callback');
-            scope = $injector.get('$rootScope').$new();
-            scope.dragEndMethod = callback;
-            scope.dragdata = { test: 'Goodbye!' };
+                event = getEventHandlerForEvent(element, 'dragend')[0];
+                eventData = {
+                    dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData'])
+                };
 
-            // Create the draggable element and inject the scope into the directive.
-            compile = $injector.get('$compile');
-            elem = compile('<div html5-drag on-drag-end="dragEndMethod" drag-data="dragdata"></div>')(scope);
-            scope.$apply();
+                event(eventData);
+                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text/plain', 'test-id');
+            });
 
-            // Dig into the event handlers for the newly created element.
-            eventData = angular.element._data(elem[0], 'events');
+            it('should fire a callback method if provided', function () {
+                var element, event, eventData;
 
-            // Get the event handler for onDragStart and create a dummy event object.
-            event = eventData.events.dragend[0];
-            data = {test: 'HelloWorld!'};
+                $scope.testOnDragEnd = jasmine.createSpy('onDragEnd');
+                $scope.testDragData = { data: '5bd7fffd-2ec8-12bd-df47-ffa9253d1a23'};
+                element = $compile(
+                    '<div html5-drag id="test-id" on-drag-end="testOnDragEnd" drag-data="testDragData"></div>'
+                )($scope);
+                $scope.$apply();
+                eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
+                event = getEventHandlerForEvent(element, 'dragend')[0];
 
-            // Run it and insure the callback was actually run.
-            event(data);
-            expect(callback).toHaveBeenCalledWith(data, scope.dragdata);
-        }));
+                event(eventData);
+                expect($scope.testOnDragEnd).toHaveBeenCalledWith(eventData, element, $scope.testDragData);
+            });
+        });
 
     });
 
