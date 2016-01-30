@@ -28,9 +28,7 @@
             var element = $compile('<div html5-drag></div>')($scope);
             $scope.$apply();
 
-            expect(element.attr('id')).toBeDefined();
-            expect(element.attr('id')).not.toBeNull();
-            expect(element.attr('id').length).toBe(36);
+            expect(element.attr('id')).toBe('draggable-id-1');
         });
 
         it('should add "draggable" to the element', function () {

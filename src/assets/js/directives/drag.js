@@ -48,7 +48,7 @@
 
                 // Assign a unique id to the element if it has no id.
                 if (!element.attr('id')) {
-                    element.attr('id', generateUniqueId());
+                    element.attr('id', generateUniqueId(scope));
                 }
 
                 // Add attributes to the element to make it draggable.
@@ -82,17 +82,14 @@
      * dataTransfer so that the end of the drag events can determine which
      * element was dragged.
      *
-     * @see http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
      * @return {string} The new unique id for the element.
      */
-    function generateUniqueId() {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
+    function generateUniqueId(scope) {
+        if (!scope.currentIdNum) {
+            scope.currentIdNum = 0;
         }
 
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();
+        scope.currentIdNum += 1;
+        return 'draggable-id-' + scope.currentIdNum;
     }
 }());
