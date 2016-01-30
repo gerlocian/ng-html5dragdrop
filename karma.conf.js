@@ -19,6 +19,7 @@ module.exports = function(config) {
             'src/assets/lib/angular-mocks/angular-mocks.js',
             'src/assets/js/app.js',
             'src/assets/js/directives/drag.js',
+            'src/assets/js/directives/drop.js',
             'tests/**/*.spec.js'
         ],
 

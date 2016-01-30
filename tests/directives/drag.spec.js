@@ -31,6 +31,18 @@
             expect(element.attr('id')).toBe('draggable-id-1');
         });
 
+        it('should assign the next id in sequence to the element if it does not have one', function () {
+            var element;
+
+            $scope.currentIdNum = 3;
+            element = $compile('<div html5-drag></div>')($scope);
+            $scope.$apply();
+
+            $scope.currentIdNum = 3;
+
+            expect(element.attr('id')).toBe('draggable-id-4');
+        });
+
         it('should add "draggable" to the element', function () {
             var element = $compile('<div html5-drag></div>')($scope);
             $scope.$apply();
