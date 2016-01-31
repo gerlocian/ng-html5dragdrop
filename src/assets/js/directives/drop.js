@@ -57,7 +57,7 @@
                 setupEvent(element, 'dragleave', onDragLeave, false);
                 setupEvent(element, 'drop',      onDrop,      true );
             }
-        }
+        };
     });
 
     /**

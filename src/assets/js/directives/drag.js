@@ -61,7 +61,7 @@
                 setupEvent(element, 'drag',      onDrag,      false);
                 setupEvent(element, 'dragend',   onDragEnd,   false);
             }
-        }
+        };
     });
 
     /**

@@ -8,7 +8,9 @@
 
     module.exports = function () {
         return gulp.src([].concat(
-                'src/assets/js/app.js'
+                'src/assets/js/app.js',
+                'src/assets/js/directives/drag.js',
+                'src/assets/js/directives/drop.js'
             ))
             .pipe(concat('ng-html5dragdrop.js'))
             .pipe(gulp.dest('./dist/'))

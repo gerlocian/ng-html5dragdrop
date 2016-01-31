@@ -15,6 +15,9 @@
     "semi": [
       2,
       "always"
+    ],
+    "angular/document-service": [
+      0
     ]
   },
   "env": {
