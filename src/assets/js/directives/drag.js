@@ -84,6 +84,7 @@
     /**
      * Sets up the event handlers and callbacks for each draggable element for
      * drag and drop.
+     *
      * @param element {angular.element} The element representing the draggable.
      * @param eventName {string} The event name to setup for the element.
      * @param callback {Function} The callback function for the event.
