@@ -56,22 +56,10 @@
                 element.data('dragData', dragData);
 
                 // Assign event handlers to dragging events.
-                element.on('dragstart', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
-
-                    if (angular.isFunction(onDragStart))
-                        onDragStart(event, element, element.data().dragData);
-                });
-
-                element.on('drag', function (event) {
-                    if (angular.isFunction(onDrag))
-                        onDrag(event, element, element.data().dragData);
-                });
-
-                element.on('dragend', function (event) {
-                    if (angular.isFunction(onDragEnd))
-                        onDragEnd(event, element, element.data().dragData);
-                });
+                //         element, event,       callback,    storeId?
+                setupEvent(element, 'dragstart', onDragStart, true );
+                setupEvent(element, 'drag',      onDrag,      false);
+                setupEvent(element, 'dragend',   onDragEnd,   false);
             }
         }
     });
@@ -91,5 +79,25 @@
 
         scope.currentIdNum += 1;
         return 'draggable-id-' + scope.currentIdNum;
+    }
+
+    /**
+     * Sets up the event handlers and callbacks for each draggable element for
+     * drag and drop.
+     * @param element {angular.element} The element representing the draggable.
+     * @param eventName {string} The event name to setup for the element.
+     * @param callback {Function} The callback function for the event.
+     * @param storeId {boolean} Determines if element id is stored.
+     */
+    function setupEvent(element, eventName, callback, storeId) {
+        element.on(eventName, function (event) {
+            if (storeId) {
+                event.dataTransfer.setData('text/plain', element.attr('id'));
+            }
+
+            if (angular.isFunction(callback)) {
+                callback(event, element, element.data().dragData);
+            }
+        });
     }
 }());
