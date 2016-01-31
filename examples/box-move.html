@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="testApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Box Move Example</title>
+
+    <style>
+
+        div.dropzone {
+            width: 250px;
+            height: 250px;
+            background: #999;
+            float: left;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        div.box {
+            width: 50px;
+            height: 50px;
+            background: #f00;
+            float: left;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="../src/assets/lib/angular/angular.js"></script>
+    <script type="text/javascript" src="../dist/ng-html5dragdrop.min.js"></script>
+    <script type="text/javascript">
+
+        angular.module('testApp', ['html5DragDrop'])
+            .controller('testController', function () {
+                this.drop = function (event, element, draggable) {
+                    element.append(draggable);
+                };
+            });
+
+    </script>
+</head>
+<body ng-controller="testController as ctrl">
+    <div class='dropzone' html5-drop on-drop='ctrl.drop'>
+        <div class='box' html5-drag></div>
+    </div>
+    <div class='dropzone' html5-drop on-drop='ctrl.drop'></div>
+    <div class='dropzone' html5-drop on-drop='ctrl.drop'></div>
+</body>
+</html>

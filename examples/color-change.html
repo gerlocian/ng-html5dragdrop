@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="testApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Box Move Example</title>
+
+    <style>
+
+        div.dropzone {
+            width: 250px;
+            height: 250px;
+            background: #ccc;
+            float: left;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        div.color {
+            width: 50px;
+            height: 50px;
+            float: left;
+        }
+
+        div.red {
+            background-color: #f00;
+        }
+
+        div.blue {
+            background-color: #00f;
+        }
+
+        div.green {
+            background-color: #0f0;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="../src/assets/lib/angular/angular.js"></script>
+    <script type="text/javascript" src="../dist/ng-html5dragdrop.min.js"></script>
+    <script type="text/javascript">
+
+        angular.module('testApp', ['html5DragDrop'])
+                .controller('testController', function () {
+                    this.drop = function (event, element, draggable, data) {
+                        element.css('backgroundColor', data.color);
+                    };
+                });
+
+    </script>
+</head>
+<body ng-controller="testController as ctrl">
+    <div class="color red" html5-drag drag-data="{ color: '#f00' }"></div>
+    <div class="color blue" html5-drag drag-data="{ color: '#00f' }"></div>
+    <div class="color green" html5-drag drag-data="{ color: '#0f0' }"></div>
+
+    <div class='dropzone' html5-drop on-drop='ctrl.drop'></div>
+</body>
+</html>
