@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="testApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Sort Example</title>
+
+    <style>
+
+        div.dropzone {
+            width: 250px;
+            height: 250px;
+            background: #999;
+            float: left;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        div.box {
+            width: 50px;
+            height: 50px;
+            margin: 10px auto 0px;
+        }
+
+        .red {
+            background: #ff9999;
+        }
+
+        .blue {
+            background: #9999ff;
+        }
+
+        .green {
+            background: #99ff99;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="../src/assets/lib/angular/angular.js"></script>
+    <script type="text/javascript" src="../dist/ng-html5dragdrop.js"></script>
+    <script type="text/javascript">
+        (function () {
+            'use strict';
+            function TestController () {
+                this.sortables = [
+                    {id: 1, class: 'red'},
+                    {id: 2, class: 'blue'},
+                    {id: 3, class: 'green'}
+                ];
+            };
+
+            TestController.prototype.onDragMove = function (event, dropzone, draggable) {
+                var boxes = document.getElementsByClassName('box'),
+                    $draggable = angular.element(draggable),
+                    box, el;
+
+                for(el in boxes) {
+                    if (boxes.hasOwnProperty(el)) {
+                        var box = boxes[el],
+                                $box = angular.element(box);
+
+                        if ($box.attr('id') !== draggable.attr('id')) {
+                            if (box.offsetTop < event.y) {
+                                $box.after($draggable);
+                            } else {
+                                $draggable.after($box);
+                                break;
+                            }
+                        }
+                    }
+                }
+            };
+
+            TestController.prototype.onDrop = function () {
+                var boxes = angular.element(document.getElementsByClassName('box')),
+                    i;
+
+                for(i=0; i < this.sortables.length; i) {
+                    this.sortables.splice(i, 1);
+                }
+
+                for(i=0; i < boxes.length; i += 1){
+                    this.sortables.push(boxes.eq(i).data('dragData'));
+                };
+            };
+
+            angular.module('testApp', ['html5DragDrop'])
+                    .controller('testController', TestController);
+        }());
+
+    </script>
+</head>
+<body ng-controller="testController as testctrl">
+
+<div>Sortables length: {{ testctrl.sortables.length }}</div>
+
+<div class='dropzone' html5-drop on-drag-over='testctrl.onDragMove' on-drop="testctrl.onDrop">
+    <div ng-repeat="sortable in testctrl.sortables track by sortable.id" html5-drag class="box {{ sortable.class }}" drag-data="sortable">{{ sortable.id }}</div>
+</div>
+
+<div ng-repeat="sortable in testctrl.sortables track by sortable.id" ng-if="testctrl.sortables.length > 0">
+    {{ sortable.id }} : {{ sortable.class }}
+</div>
+
+</body>
+</html>

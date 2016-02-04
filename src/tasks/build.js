@@ -19,6 +19,6 @@
             .pipe(gulp.dest('./dist/'));
     };
 
-    module.exports.dependencies = ['lint'];
+    //module.exports.dependencies = ['lint'];
 
 }());
