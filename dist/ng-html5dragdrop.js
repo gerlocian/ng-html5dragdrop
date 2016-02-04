@@ -38,26 +38,23 @@
      *
      *     - onDragStart (event, element, data):
      *         Example: (<div html5-drag on-drag-start='{function_name}></div>)
-     *         The name of the method to fire when the draggable element starts
-     *         to move. You only want to include the method name. The method
-     *         will then be fired with the event data as the first parameter
-     *         and the dragData as the second if available.
+     *         A method invocation that returns the callback to fire when the
+     *         draggable element starts to move. The callback will then be
+     *         fired with the event data as the first parameter and the
+     *         dragData as the second if available.
      *
      *     - onDrag (event, element, data):
      *         Example: (<div html5-drag on-drag='{function_name}'></div>)
-     *         The name of the method to fire as the draggable element is moved
-     *         across the screen. This method is given the event data and the
-     *         dragData if available. This method will also be fired numerous
-     *         times, so be very careful to ensure that you don't use process
-     *         intensive logic here.
+     *         A method invocation that returns the callback to fire as the
+     *         draggable element is moved across the screen. This method will
+     *         also be fired numerous times, so be very careful to ensure that
+     *         you don't use process intensive logic here.
      *
      *     - onDragEnd (event, element, data):
      *         Example: (<div html5-drag on-drag-end='{function_name}'></div>)
-     *         The name of the method to fire once the draggable element is
-     *         released. This method will fire whether or not the element was
-     *         dragged and released into a valid drop zone. The method should
-     *         expect to receive the event data and the dragData if available
-     *         as parameters.
+     *         A method invocation that returns the callback to fire once the
+     *         draggable element is released. This method will fire whether or
+     *         not the element was dragged and released into a valid drop zone.
      */
     angular.module('html5DragDrop').directive('html5Drag', function () {
         return {
@@ -135,35 +132,26 @@
      *
      *     - onDragEnter (event, dropzone, draggedElement, data):
      *         Example: (<div html5-drop on-drag-enter='{function_name}></div>)
-     *         The name of the method to fire when the draggable element first
-     *         moves over the dropzone. You only want to include the method
-     *         name. The method will then be fired with the following
-     *         attributes:
-     *             1) Event - the event caused by the drag enter.
-     *             2) Dropzone - the element representing the dropzone.
-     *             3) Dragged - the element being dragged into the area.
-     *             4) Data - the dragged data from the dragged element.
+     *         A method invocation that returns the callback to fire when the
+     *         draggable element first moves over the dropzone.
      *
      *     - onDragOver (event, dropzone, draggedElement, data):
      *         Example: (<div html5-drop on-drag-over='{function_name}'></div>)
-     *         The name of the method to fire as the draggable element is
-     *         moving across the screen. This method is given the same data as
-     *         onDragEnter event. This method will also be fired numerous
-     *         times, so be very careful to ensure that you don't use process
-     *         intensive logic here.
+     *         A method invocation that returns the callback to fire as the
+     *         draggable element is moving across the dropzone. This method
+     *         will be fired numerous times, so be very careful to ensure that
+     *         you don't use process intensive logic here.
      *
      *     - onDragLeave (event, dropzone, draggedElement, data):
      *         Example: (<div html5-drop on-drag-leave='{function_name}'></div>)
-     *         The name of the method to fire once the draggable element leaves
-     *         a valid dropzone. Receives the same parameters as the
-     *         onDragEnter event.
+     *         A method invocation that returns the callback to fire once the
+     *         draggable element leaves a valid dropzone.
      *
      *     - onDrop (event, dropzone, draggedElement, data):
      *         Example: (<div html5-drop on-drop='{function_name}'></div>)
-     *         The name of the method to fire when the draggable item is
-     *         dropped. This will allow the final logic that completes the drag
-     *         and drop cycle. Received the same parameters as the onDragEnter
-     *         method.
+     *         A method invocation that returns the callback to fire when the
+     *         draggable item is dropped. This will allow the final logic that
+     *         completes the drag and drop cycle.
      */
     angular.module('html5DragDrop').directive('html5Drop', function () {
         return {
@@ -173,8 +161,6 @@
                     onDragOver  = scope.$eval(attrs.onDragOver),
                     onDragLeave = scope.$eval(attrs.onDragLeave),
                     onDrop      = scope.$eval(attrs.onDrop);
-
-                console.log(scope);
 
                 element.on('dragenter', function (event) {
                     event.preventDefault();

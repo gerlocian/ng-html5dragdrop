@@ -40,30 +40,34 @@
     <script type="text/javascript">
         (function () {
             'use strict';
-            function TestController () {
+            function TestController ($scope) {
                 this.sortables = [
                     {id: 1, class: 'red'},
                     {id: 2, class: 'blue'},
                     {id: 3, class: 'green'}
                 ];
+
+                this.$scope = $scope;
             };
 
-            TestController.prototype.onDragMove = function (event, dropzone, draggable) {
-                var boxes = document.getElementsByClassName('box'),
-                    $draggable = angular.element(draggable),
-                    box, el;
+            TestController.prototype.onDragMove = function () {
+                return function (event, dropzone, draggable) {
+                    var boxes = document.getElementsByClassName('box'),
+                        $draggable = angular.element(draggable),
+                        box, el;
 
-                for(el in boxes) {
-                    if (boxes.hasOwnProperty(el)) {
-                        var box = boxes[el],
-                                $box = angular.element(box);
+                    for(el in boxes) {
+                        if (boxes.hasOwnProperty(el)) {
+                            var box = boxes[el],
+                                    $box = angular.element(box);
 
-                        if ($box.attr('id') !== draggable.attr('id')) {
-                            if (box.offsetTop < event.y) {
-                                $box.after($draggable);
-                            } else {
-                                $draggable.after($box);
-                                break;
+                            if ($box.attr('id') !== draggable.attr('id')) {
+                                if (box.offsetTop < event.y) {
+                                    $box.after($draggable);
+                                } else {
+                                    $draggable.after($box);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -71,33 +75,44 @@
             };
 
             TestController.prototype.onDrop = function () {
-                var boxes = angular.element(document.getElementsByClassName('box')),
-                    i;
+                var vm = this;
 
-                for(i=0; i < this.sortables.length; i) {
-                    this.sortables.splice(i, 1);
+                return function () {
+                    var boxes = angular.element(document.getElementsByClassName('box')),
+                        i;
+
+                    for(i=0; i < vm.sortables.length; i) {
+                        vm.sortables.splice(i, 1);
+                    }
+
+                    for(i=0; i < boxes.length; i += 1){
+                        vm.sortables.push(boxes.eq(i).data('dragData'));
+                    };
+
+                    vm.$scope.$apply();
                 }
-
-                for(i=0; i < boxes.length; i += 1){
-                    this.sortables.push(boxes.eq(i).data('dragData'));
-                };
             };
 
             angular.module('testApp', ['html5DragDrop'])
-                    .controller('testController', TestController);
+                .controller('testController', ['$scope', TestController]);
         }());
 
     </script>
 </head>
-<body ng-controller="testController as testctrl">
+<body ng-controller="testController as ctrl">
 
-<div>Sortables length: {{ testctrl.sortables.length }}</div>
+<div>Sortables length: {{ ctrl.sortables.length }}</div>
 
-<div class='dropzone' html5-drop on-drag-over='testctrl.onDragMove' on-drop="testctrl.onDrop">
-    <div ng-repeat="sortable in testctrl.sortables track by sortable.id" html5-drag class="box {{ sortable.class }}" drag-data="sortable">{{ sortable.id }}</div>
+<div class='dropzone' html5-drop on-drag-over='ctrl.onDragMove()' on-drop="ctrl.onDrop()">
+    <div
+        ng-repeat="sortable in ctrl.sortables"
+        ng-model="ctrl.sortables"
+        html5-drag
+        class="box {{ sortable.class }}"
+        drag-data="sortable">{{ sortable.id }}</div>
 </div>
 
-<div ng-repeat="sortable in testctrl.sortables track by sortable.id" ng-if="testctrl.sortables.length > 0">
+<div ng-repeat="sortable in ctrl.sortables">
     {{ sortable.id }} : {{ sortable.class }}
 </div>
 

@@ -41,8 +41,10 @@
 
         angular.module('testApp', ['html5DragDrop'])
                 .controller('testController', function () {
-                    this.drop = function (event, element, draggable, data) {
-                        element.css('backgroundColor', data.color);
+                    this.drop = function () {
+                        return function (event, element, draggable, data) {
+                            element.css('backgroundColor', data.color);
+                        }
                     };
                 });
 
@@ -53,6 +55,6 @@
     <div class="color blue" html5-drag drag-data="{ color: '#00f' }"></div>
     <div class="color green" html5-drag drag-data="{ color: '#0f0' }"></div>
 
-    <div class='dropzone' html5-drop on-drop='ctrl.drop'></div>
+    <div class='dropzone' html5-drop on-drop='ctrl.drop()'></div>
 </body>
 </html>

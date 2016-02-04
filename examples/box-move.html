@@ -30,18 +30,20 @@
 
         angular.module('testApp', ['html5DragDrop'])
             .controller('testController', function () {
-                this.drop = function (event, element, draggable) {
-                    element.append(draggable);
+                this.drop = function () {
+                    return function (event, element, draggable) {
+                        element.append(draggable);
+                    }
                 };
             });
 
     </script>
 </head>
 <body ng-controller="testController as ctrl">
-    <div class='dropzone' html5-drop on-drop='ctrl.drop'>
+    <div class='dropzone' html5-drop on-drop='ctrl.drop()'>
         <div class='box' html5-drag></div>
     </div>
-    <div class='dropzone' html5-drop on-drop='ctrl.drop'></div>
-    <div class='dropzone' html5-drop on-drop='ctrl.drop'></div>
+    <div class='dropzone' html5-drop on-drop='ctrl.drop()'></div>
+    <div class='dropzone' html5-drop on-drop='ctrl.drop()'></div>
 </body>
 </html>
