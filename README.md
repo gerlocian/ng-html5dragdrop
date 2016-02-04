@@ -1,2 +1,4 @@
 # ng-html5dragdrop
-A pure HTML5 Drag and Drop Angular module
+A pure HTML5 Drag and Drop Angular module.
+
+

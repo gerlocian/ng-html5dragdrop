@@ -51,27 +51,27 @@
                 var element, event, eventData, dragData, draggedElement;
 
                 $scope.testOnDragEnter = jasmine.createSpy('onDragEnter');
+                $scope.testOnDragEnterCallback = jasmine.createSpy('onDragEnterCallback');
+                $scope.testOnDragEnter.and.returnValue($scope.testOnDragEnterCallback);
                 dragData = { value: 'test1' };
 
                 element = $compile(
-                    '<div html5-drop id="test-id" on-drag-enter="testOnDragEnter"></div>'
+                    '<div html5-drop id="test-id" on-drag-enter="testOnDragEnter()"></div>'
                 )($scope);
                 draggedElement = angular.element(
-                    '<div html5-drag id="draggable-element"></div>'
+                    '<div html5-drag id="draggable-element" class="dragging"></div>'
                 ).data({dragData: dragData});
                 angular.element(document.body).append(draggedElement);
 
                 $scope.$apply();
                 eventData = {
-                    preventDefault: jasmine.createSpy('preventDefault'),
-                    dataTransfer: { getData: jasmine.createSpy('getData') }
+                    preventDefault: jasmine.createSpy('preventDefault')
                 };
-                eventData.dataTransfer.getData.and.returnValue('draggable-element');
+
                 event = getEventHandlerForEvent(element, 'dragenter')[0];
 
                 event(eventData);
-                expect($scope.testOnDragEnter).toHaveBeenCalledWith(eventData, element, draggedElement, dragData);
-                expect(eventData.dataTransfer.getData).toHaveBeenCalledWith('text/plain');
+                expect($scope.testOnDragEnterCallback).toHaveBeenCalledWith(eventData, element, draggedElement, dragData);
 
                 draggedElement.remove();
             });
@@ -110,21 +110,19 @@
                     '<div html5-drop id="test-id" on-drag-over="testOnDragOver"></div>'
                 )($scope);
                 draggedElement = angular.element(
-                    '<div html5-drag id="draggable-element"></div>'
+                    '<div html5-drag id="draggable-element" class="dragging"></div>'
                 ).data({dragData: dragData});
                 angular.element(document.body).append(draggedElement);
 
                 $scope.$apply();
                 eventData = {
-                    preventDefault: jasmine.createSpy('preventDefault'),
-                    dataTransfer: { getData: jasmine.createSpy('getData') }
+                    preventDefault: jasmine.createSpy('preventDefault')
                 };
-                eventData.dataTransfer.getData.and.returnValue('draggable-element');
+
                 event = getEventHandlerForEvent(element, 'dragover')[0];
 
                 event(eventData);
                 expect($scope.testOnDragOver).toHaveBeenCalledWith(eventData, element, draggedElement, dragData);
-                expect(eventData.dataTransfer.getData).toHaveBeenCalledWith('text/plain');
 
                 draggedElement.remove();
             });
@@ -163,18 +161,17 @@
                     '<div html5-drop id="test-id" on-drag-leave="testOnDragLeave"></div>'
                 )($scope);
                 draggedElement = angular.element(
-                    '<div html5-drag id="draggable-element"></div>'
+                    '<div html5-drag id="draggable-element" class="dragging"></div>'
                 ).data({dragData: dragData});
                 angular.element(document.body).append(draggedElement);
 
                 $scope.$apply();
-                eventData = { dataTransfer: { getData: jasmine.createSpy('getData') }};
-                eventData.dataTransfer.getData.and.returnValue('draggable-element');
+                eventData = {};
+
                 event = getEventHandlerForEvent(element, 'dragleave')[0];
 
                 event(eventData);
                 expect($scope.testOnDragLeave).toHaveBeenCalledWith(eventData, element, draggedElement, dragData);
-                expect(eventData.dataTransfer.getData).toHaveBeenCalledWith('text/plain');
 
                 draggedElement.remove();
             });
