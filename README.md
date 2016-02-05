@@ -264,3 +264,31 @@ angular.module('myApp', ['html5DragDrop']).controller('MyController', function (
     <div html5-drop on-drop="onDrop()">Dropzone Element</div>
 </body>
 ```
+
+## Examples
+[Box Move](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/box-move.html) - Simple box move between different dropzones.
+[Color Change](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/color-change.html) - Change the color of the dropzone by dragging the colors into it.
+[Sort](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/sort.html) - Simple and rudimentary sorting.
+
+## Development
+During development of this module, I wanted to follow these two rules:
+
+1. No JQuery or JQuery UI beyond what is provided by jqLite from AngularJS.
+1. Do not move the draggable element with javascript outside of the normal drag and drop functionality of HTML5.
+
+Install the dependencies:
+```bash
+# NPM Globals
+$ npm install karma gulp bower -g
+
+# NPM Local
+$ npm install
+
+# Bower
+$ bower install
+```
+
+Run Karma for unit testing:
+```bash
+$ karma start karma.conf.js
+```
