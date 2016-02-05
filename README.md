@@ -145,6 +145,122 @@ angular.module('myApp', ['html5DragDrop']).controller('MyController', function (
 *html*
 ```
 <body ng-controller="MyController">
-    <div html5-drag drag-data="myStuff" on-drag-end="onDragStart">Drag Element</div>
+    <div html5-drag drag-data="myStuff" on-drag-end="onDragEnd()">Drag Element</div>
+</body>
+```
+
+#### Drop
+For the dropzone element, you can add `on-drag-enter`, `on-drag-over`, `on-drag-leave`, and `on-drop` callbacks for those methods. All of these methods are optional, but if you don't include any of them, your application won't have much drag and drop functionality. Each callback should expect to receive the following four parameters:
+
+1. event - The event fired for the drag start.
+1. dropzone - The dropzone element firing the events.
+1. draggable - The element being dragged.
+1. data - The data provided by the drag-data attribute on the draggable element.
+
+##### on-drag-enter (optional)
+The callback is fired when the draggable element is first dragged into the boundries of the dropzone.
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    
+    $scope.onDragEnter = function () {
+        return function (event, dropzone, draggable, data) {
+            console.log('Element has entered the dropzone!');
+        }
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff">Drag Element</div>
+    <div html5-drop on-drag-enter="onDragEnter()">Dropzone Element</div>
+</body>
+```
+
+##### on-drag-over (optional)
+The callback is fired as the draggable element moves over the dropzone. Because of the repeated nature of this callback, it is best to be careful not to make your callback too process intensive. 
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    
+    $scope.onDragOver = function () {
+        return function (event, dropzone, draggable, data) {
+            console.log('Element is moving over the dropzone!');
+        }
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff">Drag Element</div>
+    <div html5-drop on-drag-over="onDragOver()">Dropzone Element</div>
+</body>
+```
+
+##### on-drag-leave (optional)
+The callback is fired when the dragged element is moved out of the bounds of the dropzone. 
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    
+    $scope.onDragLeave = function () {
+        return function (event, dropzone, draggable, data) {
+            console.log('Element has left the dropzone!');
+        }
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff">Drag Element</div>
+    <div html5-drop on-drag-leave="onDragLeave()">Dropzone Element</div>
+</body>
+```
+
+##### on-drop (optional)
+The callback is fired when the draggable element has been dropped into the dropzone.
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    
+    $scope.onDrop = function () {
+        return function (event, dropzone, draggable, data) {
+            console.log('Element has been dropped into the dropzone!');
+        }
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff">Drag Element</div>
+    <div html5-drop on-drop="onDrop()">Dropzone Element</div>
 </body>
 ```
