@@ -1,8 +1,7 @@
 (function () {
     'use strict';
 
-    var gulp = require('gulp'),
-        serve = require('gulp-serve');
+    var serve = require('gulp-serve');
 
     module.exports = serve({
         root: ['.'],

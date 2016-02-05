@@ -9,4 +9,4 @@ node_js:
 before_script:
   - npm install -g gulp bower karma
   - bower install
-script: karma start karma.conf.js --single-run
+script: gulp test
