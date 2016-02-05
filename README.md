@@ -266,9 +266,10 @@ angular.module('myApp', ['html5DragDrop']).controller('MyController', function (
 ```
 
 ## Examples
-[Box Move](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/box-move.html) - Simple box move between different dropzones.
-[Color Change](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/color-change.html) - Change the color of the dropzone by dragging the colors into it.
-[Sort](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/sort.html) - Simple and rudimentary sorting.
+
+1. [Box Move](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/box-move.html) - Simple box move between different dropzones.
+1. [Color Change](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/color-change.html) - Change the color of the dropzone by dragging the colors into it.
+1. [Sort](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/sort.html) - Simple and rudimentary sorting.
 
 ## Development
 During development of this module, I wanted to follow these two rules:
