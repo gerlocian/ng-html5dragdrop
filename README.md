@@ -9,12 +9,12 @@ A pure HTML5 Drag and Drop Angular module.
 ## Installation
 To install, you can either use Bower or NPM.
 
-##### Bower
+#### Bower
 ```bash
 $ bower install ng-html5dragdrop --save
 ```
 
-##### NPM
+#### NPM
 ```bash
 $ npm install ng-html5dragdrop --save
 ```
@@ -32,3 +32,119 @@ After the chosen javascript file is included in your markup, you will need to ad
 angular.module('myApp', ['html5DragDrop']);
 ```
 
+At this point, you can start adding the directives to your elements.
+```
+<div html5-drag id="myDraggableElement">This is Draggable</div>
+<div html5-drop id="myDropzoneElement">This is a Dropzone</div>
+```
+
+## Customizing the behavior
+The HTML5 Drag and Drop module allows you to add additional functionality through the use of callbacks that you provide with methods on the element through directive attributes. Each directive (`html5-drag` and `html5-drop`) allows you to add methods that will provide a callback for the event to which you want to add functionality.
+
+#### Drag
+For the draggable element, you can add `drag-data`, `on-drag-start`, `on-drag`, and `on-drag-end` callbacks for those methods. All of these methods are optional, but if you don't include any of them, your application won't have much drag and drop functionality. Each callback (except `drag-data`) should expect to receive the following three parameters:
+
+1. event - The event fired for the drag start.
+1. element - The element being dragged.
+1. data - The data provided by the drag-data attribute.
+
+##### drag-data (optional)
+This attribute allows you to add arbitrary data that you want to move allong with the dragged element. Every event that fires once the drag starts will have access to this data, including the events fired by the dropzone.
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff">Drag Element</div>
+</body>
+```
+
+##### on-drag-start (optional)
+The callback is fired when the draggable element first starts to move. In the main directive, this is when we create an id for the element if it doesn't exist, store the element's id in the dataTransfer object of the event, and fire the provided callback.
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    
+    // Remember: return the actual callback.
+    $scope.onDragStart = function () {
+        return function (event, draggedElement, data) {
+            console.log('Element has started being dragged!');
+        }
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff" on-drag-start="onDragStart()">Drag Element</div>
+</body>
+```
+
+##### on-drag (optional)
+The callback is fired every so many milliseconds as the draggable element is moving. Because of the repeated nature of this callback, it is best to be careful not to make your callback too process intensive.
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    
+    // Remember: return the actual callback.
+    $scope.onDrag = function () {
+        return function (event, draggedElement, data) {
+            console.log('Element is moving!');
+        }
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff" on-drag="onDrag()">Drag Element</div>
+</body>
+```
+
+##### on-drag-end (optional)
+The callback is fired when the draggable element has been dropped. This can happen for any reason, and does not need to be because it was dropped into a valid dropzone.
+
+*js*
+```
+angular.module('myApp', ['html5DragDrop']).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    
+    // Remember: return the actual callback.
+    $scope.onDragEnd = function () {
+        return function (event, draggedElement, data) {
+            console.log('Element has been dropped!');
+        }
+    };
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag drag-data="myStuff" on-drag-end="onDragStart">Drag Element</div>
+</body>
+```
