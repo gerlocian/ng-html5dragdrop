@@ -2,6 +2,10 @@ Angular HTML5 Drag and Drop
 ===========================
 A pure HTML5 Drag and Drop Angular module.
 
+[![Build Status](https://travis-ci.org/gerlocian/ng-html5dragdrop.svg?branch=master)](https://travis-ci.org/gerlocian/ng-html5dragdrop)
+[![Dependency Status](https://david-dm.org/gerlocian/ng-html5dragdrop.svg)](https://david-dm.org/gerlocian/ng-html5dragdrop)
+[![devDependency Status](https://david-dm.org/gerlocian/ng-html5dragdrop/dev-status.svg)](https://david-dm.org/gerlocian/ng-html5dragdrop#info=devDependencies)
+
 ## Installation
 To install, you can either use Bower or NPM.
 
