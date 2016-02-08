@@ -276,6 +276,7 @@ During development of this module, I wanted to follow these two rules:
 
 1. No JQuery or JQuery UI beyond what is provided by jqLite from AngularJS.
 1. Do not move the draggable element with javascript outside of the normal drag and drop functionality of HTML5.
+1. Do not overcomplicate the interface. Only worry about setting up the drag and drop and allow the author to worry about what to do with it.
 
 Install the dependencies:
 ```bash
