@@ -272,7 +272,7 @@ angular.module('myApp', ['html5DragDrop']).controller('MyController', function (
 1. [Sort](https://github.com/gerlocian/ng-html5dragdrop/tree/master/examples/sort.html) - Simple and rudimentary sorting.
 
 ## Development
-During development of this module, I wanted to follow these two rules:
+During development of this module, I wanted to follow these rules:
 
 1. No JQuery or JQuery UI beyond what is provided by jqLite from AngularJS.
 1. Do not move the draggable element with javascript outside of the normal drag and drop functionality of HTML5.
