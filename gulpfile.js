@@ -1,10 +1,9 @@
 (function () {
     'use strict';
 
+    var path = require('path');
     var loader = require('gulp-task-loader');
 
-    loader({
-        dir: './src/tasks/'
-    });
+    loader(path.join('src', 'tasks'));
 
 }());
