@@ -80,7 +80,7 @@
                 eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
 
                 event(eventData);
-                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text/plain', 'test-id');
+                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text', 'test-id');
             });
 
             it('should fire a callback method if provided', function () {
