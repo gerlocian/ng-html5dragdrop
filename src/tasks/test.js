@@ -7,7 +7,7 @@
     function task(done) {
         var options = {};
         options.configFile = path.resolve('./karma.conf.js');
-        options.browsers = ['PhantomJS'];
+        options.browsers = ['PhantomJS', 'Chrome'];
         options.singleRun = true;
         new karma(options, done).start();
     }
