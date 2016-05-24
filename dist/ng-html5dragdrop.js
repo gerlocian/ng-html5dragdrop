@@ -75,7 +75,8 @@
                 element.data('dragData', dragData);
 
                 element.on('dragstart', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
+                    var dataTransfer = event.dataTransfer || event.originalEvent.dataTransfer;
+                    dataTransfer.setData('text', element.attr('id'));
                     angular.element(document.getElementsByClassName('dragging')).removeClass('dragging');
                     element.addClass('dragging');
 
@@ -194,7 +195,8 @@
                     event.preventDefault();
 
                     if (angular.isFunction(onDrop)) {
-                        var dragElementId = event.dataTransfer.getData('text/plain'),
+                        var dataTransfer = event.dataTransfer || event.originalEvent.dataTransfer,
+                            dragElementId = event.dataTransfer.getData('text/plain'),
                             draggedEl = angular.element(document.getElementById(dragElementId));
                         onDrop(event, element, draggedEl, draggedEl.data('dragData'));
                     }

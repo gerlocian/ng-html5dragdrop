@@ -73,7 +73,8 @@
                     event.preventDefault();
 
                     if (angular.isFunction(onDrop)) {
-                        var dragElementId = event.dataTransfer.getData('text/plain'),
+                        var dataTransfer = event.dataTransfer || event.originalEvent.dataTransfer,
+                            dragElementId = event.dataTransfer.getData('text/plain'),
                             draggedEl = angular.element(document.getElementById(dragElementId));
                         onDrop(event, element, draggedEl, draggedEl.data('dragData'));
                     }
