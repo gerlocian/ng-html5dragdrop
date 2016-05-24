@@ -75,7 +75,7 @@
                 element.data('dragData', dragData);
 
                 element.on('dragstart', function (event) {
-                    event.dataTransfer.setData('text/plain', element.attr('id'));
+                    event.dataTransfer.setData('text', element.attr('id'));
                     angular.element(document.getElementsByClassName('dragging')).removeClass('dragging');
                     element.addClass('dragging');
 
