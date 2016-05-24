@@ -224,7 +224,7 @@
 
                 event(eventData);
                 expect($scope.testOnDrop).toHaveBeenCalledWith(eventData, element, draggedElement, dragData);
-                expect(eventData.dataTransfer.getData).toHaveBeenCalledWith('text/plain');
+                expect(eventData.dataTransfer.getData).toHaveBeenCalledWith('text');
 
                 draggedElement.remove();
             });
