@@ -49,7 +49,7 @@ For the draggable element, you can add `drag-data`, `on-drag-start`, `on-drag`, 
 1. data - The data provided by the drag-data attribute.
 
 ##### drag-data (optional)
-This attribute allows you to add arbitrary data that you want to move allong with the dragged element. Every event that fires once the drag starts will have access to this data, including the events fired by the dropzone.
+This attribute allows you to add arbitrary data that you want to move along with the dragged element. Every event that fires once the drag starts will have access to this data, including the events fired by the dropzone.
 
 *js*
 ```
@@ -65,6 +65,48 @@ angular.module('myApp', ['html5DragDrop']).controller('MyController', function (
 ```
 <body ng-controller="MyController">
     <div html5-drag drag-data="myStuff">Drag Element</div>
+</body>
+```
+
+##### transfer-type (optional, but if used, you must specify transfer-data)
+This attribute allows you to specify the type of data that will be assigned to dataTransfer. This is separate from drag-data above. "transfer-type" can be any type of value, but in most cases, a string will make the most sense. While before we were only able to use "text", this attribute allows you to specify other types. If you provide a value for this attribute, you must also provide one for "transfer-data" in order to specify what data you want to have the dataTransfer method move around. If you don't, the directive will resort to using default values and an error will be placed in the console.
+
+*js*
+```
+angular.module('myApp', [html5DragDrop]).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    $scope.transferData = JSON.stringify($scope.myStuff);
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag transfer-type="json" transfer-data="transferData">Drag Element</div>
+</body>
+```
+
+##### transfer-data (optional, but if used, you must specify transfer-type)
+This attribute allows you to specify the data that will be assigned to dataTransfer. This is separate from drag-data above. "transfer-data" can be any type of value. While before we were only able to use the element id before, this attribute allows you to specify other data. If you provide a value for this attribute, you must also provide one for "transfer-type" in order to specify what type of data you want to have the dataTransfer method move around. If you don't, the directive will resort to using default values and an error will be placed in the console.
+
+*js*
+```
+angular.module('myApp', [html5DragDrop]).controller('MyController', function ($scope) {
+    $scope.myStuff = {
+        name: 'Patrick Ortiz',
+        profession: 'Web Developer'
+    };
+    $scope.transferData = JSON.stringify($scope.myStuff);
+});
+```
+
+*html*
+```
+<body ng-controller="MyController">
+    <div html5-drag transfer-type="json" transfer-data="transferData">Drag Element</div>
 </body>
 ```
 
