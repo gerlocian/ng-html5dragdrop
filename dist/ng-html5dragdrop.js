@@ -56,18 +56,27 @@
      *         draggable element is released. This method will fire whether or
      *         not the element was dragged and released into a valid drop zone.
      */
-    angular.module('html5DragDrop').directive('html5Drag', function () {
+    angular.module('html5DragDrop').directive('html5Drag', function ($log) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                var dragData = scope.$eval(attrs.dragData),
-                    onDragStart = scope.$eval(attrs.onDragStart),
-                    onDrag = scope.$eval(attrs.onDrag),
-                    onDragEnd = scope.$eval(attrs.onDragEnd);
-
                 // Assign a unique id to the element if it has no id.
                 if (!element.attr('id')) {
                     element.attr('id', generateUniqueId());
+                }
+
+                var dragData        = scope.$eval(attrs.dragData),
+                    transferType    = scope.$eval(attrs.transferType) || attrs.transferType || 'text',
+                    transferData    = scope.$eval(attrs.transferData) || attrs.transferData || element.attr('id'),
+                    onDragStart     = scope.$eval(attrs.onDragStart),
+                    onDrag          = scope.$eval(attrs.onDrag),
+                    onDragEnd       = scope.$eval(attrs.onDragEnd);
+
+                // Ensure that the transferType and transferData are both set if either is set.
+                if ((attrs.transferType && !attrs.transferData) || (attrs.transferData && !attrs.transferType)) {
+                    $log.error('Transfer-type and transfer-data must both be provided. Ignoring both...');
+                    transferType = 'text';
+                    transferData = element.attr('id');
                 }
 
                 // Add attributes to the element to make it draggable.
@@ -76,7 +85,7 @@
 
                 element.on('dragstart', function (event) {
                     var dataTransfer = event.dataTransfer || event.originalEvent.dataTransfer;
-                    dataTransfer.setData('text', element.attr('id'));
+                    dataTransfer.setData(transferType, transferData);
                     angular.element(document.getElementsByClassName('dragging')).removeClass('dragging');
                     element.addClass('dragging');
 
