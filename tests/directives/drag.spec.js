@@ -83,6 +83,43 @@
                 expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text', 'test-id');
             });
 
+            it('should assign the provided transferType and transferData to the event.dataTransfer if provided when ' +
+                'the dragstart event is fired', function () {
+                var element = $compile('<div html5-drag id="test-id" transfer-type="file" transfer-data="something"></div>')($scope),
+                    event, eventData;
+                $scope.$apply();
+
+                event = getEventHandlerForEvent(element, 'dragstart')[0];
+                eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
+
+                event(eventData);
+                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('file', 'something');
+            });
+
+            it('should assign default values for transferType and transferData if transferType is not provided', function () {
+                var element = $compile('<div html5-drag id="test-id" transfer-type="file" ></div>')($scope),
+                    event, eventData;
+                $scope.$apply();
+
+                event = getEventHandlerForEvent(element, 'dragstart')[0];
+                eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
+
+                event(eventData);
+                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text', 'test-id');
+            });
+
+            it('should assign default values for transferType and transferData if transferData is not provided', function () {
+                var element = $compile('<div html5-drag id="test-id" transfer-data="something" ></div>')($scope),
+                    event, eventData;
+                $scope.$apply();
+
+                event = getEventHandlerForEvent(element, 'dragstart')[0];
+                eventData = { dataTransfer: jasmine.createSpyObj('dataTransfer', ['setData']) };
+
+                event(eventData);
+                expect(eventData.dataTransfer.setData).toHaveBeenCalledWith('text', 'test-id');
+            });
+
             it('should fire a callback method if provided', function () {
                 var element, event, eventData;
 
