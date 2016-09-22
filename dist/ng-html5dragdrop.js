@@ -18,6 +18,7 @@
 
 }());
 
+/*eslint angular/di: 0 */
 (function () {
     'use strict';
 
@@ -129,6 +130,7 @@
     }
 }());
 
+/*eslint angular/di: 0 */
 (function () {
     'use strict';
 

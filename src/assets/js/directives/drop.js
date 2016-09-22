@@ -1,3 +1,4 @@
+/*eslint angular/di: 0 */
 (function () {
     'use strict';
 
