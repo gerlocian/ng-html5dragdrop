@@ -18,6 +18,7 @@
 
 }());
 
+/*eslint angular/di: 0 */
 (function () {
     'use strict';
 
@@ -56,7 +57,7 @@
      *         draggable element is released. This method will fire whether or
      *         not the element was dragged and released into a valid drop zone.
      */
-    angular.module('html5DragDrop').directive('html5Drag', function ($log) {
+    angular.module('html5DragDrop').directive('html5Drag', ['$log', function ($log) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
@@ -109,7 +110,7 @@
                 });
             }
         };
-    });
+    }]);
 
     /**
      * Generates a unique id for the element in the event that the element does
@@ -129,6 +130,7 @@
     }
 }());
 
+/*eslint angular/di: 0 */
 (function () {
     'use strict';
 

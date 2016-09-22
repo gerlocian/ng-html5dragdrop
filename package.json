@@ -1,6 +1,6 @@
 {
   "name": "ng-html5dragdrop",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "A pure HTML5 Drag and Drop Angular module.",
   "scripts": {
     "test": "karma start karma.conf.js"
